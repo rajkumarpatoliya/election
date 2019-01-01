@@ -7,12 +7,18 @@ contract Election {
         string name;
         uint voteCount;
     }
-    // struct candidate
-    // store candidate
+    // store candidates
     // fetch candidate
     mapping(uint => Candidate) public candidates;
+    // store candidates count
+    uint public candidatesCount;
     // constructor
     constructor () public {
-
+        addCandidate("Shri Narendra Modiji");
+        addCandidate("Shri Priyanka Gandhi");
     }
+    function addCandidate(string memory _name) private {
+        candidatesCount ++;
+        candidates[candidatesCount] = Candidate(candidatesCount, _name, 0);
+    } 
 }
