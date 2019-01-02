@@ -14,6 +14,10 @@ contract Election {
     mapping(uint => Candidate) public candidates;
     // store candidates count
     uint public candidatesCount;
+    // voted event
+    event votedEvent (
+        uint indexed _candidateId
+    );
     // constructor
     constructor () public {
         addCandidate("Shri Narendra Modiji");
@@ -32,5 +36,7 @@ contract Election {
         voters[msg.sender] = true;
         // update candidate vote count
         candidates[_candidateId].voteCount ++;
+        // trigger voted event
+        emit votedEvent(_candidateId);
     }
 }

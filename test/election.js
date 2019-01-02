@@ -35,6 +35,9 @@ contract("Election", (accounts) => {
             candidateId=1;
             return electionInstance.vote(candidateId, {from: accounts[0]});
         }).then((receipt) => {
+            assert.equal(receipt.logs.length, 1, "an event was triggered");
+            assert.equal(receipt.logs[0].event, "votedEvent", "the event type is correct");
+            assert.equal(receipt.logs[0].args._candidateId.toNumber(), candidateId, "the candidate id is correct");
             return electionInstance.voters(accounts[0]);
         }).then((voted) => {
             assert(voted, "the voter has marked as voted");
@@ -53,11 +56,11 @@ contract("Election", (accounts) => {
           assert(error.message.indexOf('revert') >= 0, "error message must contain revert");
           return electionInstance.candidates(1);
         }).then((candidate1) => {
-          var voteCount = candidate1[2];
+          let voteCount = candidate1[2];
           assert.equal(voteCount, 1, "Shri Narendra Modiji did not receive any votes");
           return electionInstance.candidates(2);
         }).then((candidate2) => {
-          var voteCount = candidate2[2];
+          let voteCount = candidate2[2];
           assert.equal(voteCount, 0, "Shri Priyanka Gandhi did not receive any votes");
         });
       });
@@ -69,7 +72,7 @@ contract("Election", (accounts) => {
           electionInstance.vote(candidateId, { from: accounts[1] });
           return electionInstance.candidates(candidateId);
         }).then((candidate) => {
-          var voteCount = candidate[2];
+          let voteCount = candidate[2];
           assert.equal(voteCount, 1, "accepts first vote");
           // Try to vote again
           return electionInstance.vote(candidateId, { from: accounts[1] });
@@ -77,11 +80,11 @@ contract("Election", (accounts) => {
           assert(error.message.indexOf('revert') >= 0, "error message must contain revert");
           return electionInstance.candidates(1);
         }).then((candidate1) => {
-          var voteCount = candidate1[2];
+          let voteCount = candidate1[2];
           assert.equal(voteCount, 1, "Shri Narandra Modiji did not receive any votes");
           return electionInstance.candidates(2);
         }).then((candidate2) => {
-          var voteCount = candidate2[2];
+          let voteCount = candidate2[2];
           assert.equal(voteCount, 1, "Shri Priyanka Gandhi did not receive any votes");
         });
       });
