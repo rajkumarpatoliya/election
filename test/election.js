@@ -28,4 +28,20 @@ contract("Election", (accounts) => {
             assert.equal(candidate[2], 0, "contains the correct votes count");
         });
     });
+
+    it("Allows a voter to cast a vote", ()=> {
+        return Election.deployed().then((instance) => {
+            electionInstance = instance;
+            candidateId=1;
+            return electionInstance.vote(candidateId, {from: accounts[0]});
+        }).then((receipt) => {
+            return electionInstance.voters(accounts[0]);
+        }).then((voted) => {
+            assert(voted, "the voter has marked as voted");
+            return electionInstance.candidates(candidateId);
+        }).then((candidate) => {
+            let voteCount = candidate[2];
+            assert.equal(voteCount, 1, "Increments the candidate's vote count");
+        });
+    });
 });
